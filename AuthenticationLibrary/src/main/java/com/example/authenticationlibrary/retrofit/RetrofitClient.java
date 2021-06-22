@@ -1,7 +1,7 @@
 package com.example.authenticationlibrary.retrofit;
 
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 
 public class RetrofitClient {
@@ -11,7 +11,7 @@ public class RetrofitClient {
 
     private RetrofitClient() {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Api.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create())
                 .build();
         myApi = retrofit.create(Api.class);
     }

@@ -1,6 +1,8 @@
 package com.example.authenticationlibrary;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.authenticationlibrary.model.User;
@@ -26,22 +28,21 @@ public class Authentication {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if(response.isSuccessful() && response.body() != null){
-                    try {
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                            JSONArray jsonArray = new JSONArray(response.body());
-                            user[0] = parseArray(jsonArray);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+                if (!response.isSuccessful()) {
+                    Log.i("TAG", "onResponse: " + response.code());
+                    Toast.makeText(context, "Something wrong: " + response.toString(), Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    Log.i("TAG", "onResponse: " + response.code());
+                    Toast.makeText(context, "user register", Toast.LENGTH_SHORT).show();
+                    user[0] = response.body();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
+                return;
             }
 
         });
