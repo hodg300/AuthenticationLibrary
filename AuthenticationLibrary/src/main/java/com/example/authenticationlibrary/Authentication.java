@@ -6,7 +6,9 @@ import android.widget.Toast;
 import com.example.authenticationlibrary.model.User;
 import com.example.authenticationlibrary.retrofit.RetrofitClient;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,11 +21,22 @@ public class Authentication {
 
     public static User register(Context context, String email, String password, String fullName){
         final User[] user = new User[1];
+
         Call<User> call = RetrofitClient.getInstance().getMyApi().register(new User(email, password, fullName));
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                user[0] = new User(response.body().getEmail(), response.body().getFullName());
+                if(response.isSuccessful() && response.body() != null){
+                    try {
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                            JSONArray jsonArray = new JSONArray(response.body());
+                            user[0] = parseArray(jsonArray);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
             }
 
             @Override
@@ -33,6 +46,20 @@ public class Authentication {
 
         });
         return user[0];
+    }
+
+    private static User parseArray(JSONArray jsonArray) {
+        User user = null;
+        for(int i=0 ; i< jsonArray.length(); i++){
+            try {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                user = new User(jsonObject.getString("email"), jsonObject.getString("fullName"));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return user;
     }
 
     public static String login(Context context, String email, String password){
