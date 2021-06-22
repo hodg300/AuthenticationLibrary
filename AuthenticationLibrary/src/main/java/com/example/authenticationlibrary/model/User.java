@@ -1,66 +1,38 @@
 package com.example.authenticationlibrary.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class User {
-    private String uid;
+
+    @SerializedName("email")
     private String email;
-    private String fullName;
+    @SerializedName("password")
     private String password;
-    private String token;
+    @SerializedName("fullName")
+    private String fullName;
 
+    public User(String email, String password, String fullName) {
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+    }
 
-    public User(String uid, String email, String fullName, String password, String token) {
-        this.uid = uid;
+    public User(String email, String fullName) {
         this.email = email;
         this.fullName = fullName;
-        this.password = password;
-        this.token = token;
     }
 
     public User(){}
 
-    public String getUid() {
-        return uid;
-    }
-
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "uid='" + uid + '\'' +
-                ", email='" + email + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", password='" + password + '\'' +
-                ", token='" + token + '\'' +
-                '}';
+    public String getFullName() {
+        return fullName;
     }
 }
