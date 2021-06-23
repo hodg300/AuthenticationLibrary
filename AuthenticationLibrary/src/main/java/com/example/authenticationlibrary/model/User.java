@@ -1,17 +1,22 @@
 package com.example.authenticationlibrary.model;
 
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
 
     private String email;
     private String fullName;
+    private String accessToken;
 
     public User(String email, String fullName) {
         super();
         this.email = email;
         this.fullName = fullName;
     }
+
+
 
     public String getEmail() {
         return email;
@@ -30,4 +35,11 @@ public class User {
         this.fullName = fullName;
     }
 
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 }

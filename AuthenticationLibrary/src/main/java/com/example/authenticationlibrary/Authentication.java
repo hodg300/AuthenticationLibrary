@@ -2,6 +2,9 @@ package com.example.authenticationlibrary;
 
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 
 import com.example.authenticationlibrary.retrofit.CallBack;
@@ -55,79 +58,86 @@ public class Authentication {
             }
         });
     }
-//    public static void register(String email, String password, String fullName,
-//                                @NonNull UserCallBack callBacks){
-//        mApi = ApiUtils.getApi();
-////        User user = new User();
-////        user.setEmail(email);
-////        user.setFullName(fullName);
-////        user.setPassword(password);
-//        mApi.register(email, password, fullName).enqueue(new Callback<User>() {
-//            @Override
-//            public void onResponse(Call<User> call, Response<User> response) {
-//                if (!response.isSuccessful()) {
-//                    Log.i("TAG", "onResponse: " + response.code());
-////                    Toast.makeText(context, "Something wrong: " + response.toString(), Toast.LENGTH_SHORT).show();
-//                    return;
-//                } else {
-//                    Log.i("TAG", "onResponse: " + response.code());
-////                    Toast.makeText(context, "user register", Toast.LENGTH_SHORT).show();
-//                    if (callBacks != null)
-//                        callBacks.onSuccess(response.body());
-////                    user[0] = response.body();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<User> call, Throwable t) {
-//                System.out.println("error:" + mApi.toString());
-////                Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
-//                if (callBacks != null)
-//                    callBacks.onError(t);
-//            }
-//
-//        });
-//    }
 
-//    public static void home(Context context, @NonNull UserCallBack callBacks){
-//        // Instantiate the RequestQueue.
-//        RequestQueue queue = Volley.newRequestQueue(context);
-//        String url ="https://www.google.com";
-//
-//// Request a string response from the provided URL.
-//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                response -> {
-//                    // Display the first 500 characters of the response string.
-////                    textView.setText("Response is: "+ response.substring(0,500));
-//                   Toast.makeText(context, "get data: " + response, Toast.LENGTH_SHORT).show();
-//
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-////                textView.setText("That didn't work!");
-//                Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
-//
-//            }
-//        });
-//
-//// Add the request to the RequestQueue.
-//        queue.add(stringRequest);
-//    }
+    public void login(Context  context, String email, String password,
+                         @NonNull CallBack callBacks){
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create("{\n    \"email\": \"" + email + "\",\n    \"password\": \""+ password+"\",\n    }", mediaType);
+        Request request = new Request.Builder()
+                .url(this.baseUrl + "users/jwt-login")
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println(e);
+                if (callBacks != null)
+                    callBacks.onError(e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                System.out.println(response);
+                SharedPreferences pref = context.getSharedPreferences("MyPref", 0);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.remove("access_token");
+                editor.commit();
+                if (callBacks != null)
+                    callBacks.onSuccess(response);
+            }
+        });
+    }
+
+    public void verifyToken(String accessToken,
+                      @NonNull CallBack callBacks){
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create("{}", mediaType);
+        Request request = new Request.Builder()
+                .url(this.baseUrl + "users/verify-token")
+                .method("GET", body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Access-Token", accessToken)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println(e);
+                if (callBacks != null)
+                    callBacks.onError(e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                System.out.println(response);
+                if (callBacks != null)
+                    callBacks.onSuccess(response);
+            }
+        });
+    }
+
+    public void signOut(Context context){
+        SharedPreferences pref = context.getSharedPreferences("MyPref", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove("access_token");
+        editor.commit();
+    }
+
+    public boolean checkLoggedIn(Context context){
+        SharedPreferences pref = context.getSharedPreferences("MyPref", 0);
+        if(pref.contains("access_token")){
+            return true;
+        }
+        return false;
+    }
 
 
-//    private static User parseArray(JSONArray jsonArray) {
-//        User user = null;
-//        for(int i=0 ; i< jsonArray.length(); i++){
-//            try {
-//                JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                user = new User(jsonObject.getString("email"), jsonObject.getString("fullName"));
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return user;
-//    }
+
+
 
 //    public static String login(Context context, String email, String password){
 //        final String[] accessToken = new String[1];
