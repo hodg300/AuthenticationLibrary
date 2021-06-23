@@ -34,7 +34,7 @@ public class Authentication {
 
     public Authentication(){}
 
-    public void register(Context context, String email, String password, String fullName,
+    public void register(String email, String password, String fullName,
                                 @NonNull CallBack callBacks){
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
@@ -60,7 +60,6 @@ public class Authentication {
                     if (callBacks != null)
                         callBacks.onSuccess(response);
                 }else{
-                    Toast.makeText(context, "Email already exists", Toast.LENGTH_LONG).show();
                     if (callBacks != null)
                         callBacks.onError(new Throwable("Email already exists"));
                 }
@@ -68,7 +67,7 @@ public class Authentication {
         });
     }
 
-    public void login(Context  context, String email, String password,
+    public void login(String email, String password,
                          @NonNull CallBack callBacks){
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
@@ -83,7 +82,6 @@ public class Authentication {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 System.out.println(e);
-                Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
                 if (callBacks != null)
                     callBacks.onError(e);
             }
@@ -95,7 +93,6 @@ public class Authentication {
                     if (callBacks != null)
                         callBacks.onSuccess(response);
                 }else{
-                    Toast.makeText(context, "Invalid email or password", Toast.LENGTH_LONG).show();
                     if (callBacks != null)
                         callBacks.onError(new Throwable("Invalid email or password"));
                 }
@@ -104,7 +101,7 @@ public class Authentication {
         });
     }
 
-    public void verifyToken(Context context, String accessToken,
+    public void verifyToken(String accessToken,
                       @NonNull CallBack callBacks){
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
@@ -131,7 +128,6 @@ public class Authentication {
                     if (callBacks != null)
                         callBacks.onSuccess(response);
                 }else{
-                    Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
                     if (callBacks != null)
                         callBacks.onError(new Throwable("An error has occured"));
                 }
