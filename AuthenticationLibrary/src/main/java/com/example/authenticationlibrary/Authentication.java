@@ -61,6 +61,8 @@ public class Authentication {
                         callBacks.onSuccess(response);
                 }else{
                     Toast.makeText(context, "Email already exists", Toast.LENGTH_LONG).show();
+                    if (callBacks != null)
+                        callBacks.onError(new Throwable("Email already exists"));
                 }
             }
         });
@@ -94,6 +96,8 @@ public class Authentication {
                         callBacks.onSuccess(response);
                 }else{
                     Toast.makeText(context, "Invalid email or password", Toast.LENGTH_LONG).show();
+                    if (callBacks != null)
+                        callBacks.onError(new Throwable("Invalid email or password"));
                 }
 
             }
@@ -128,6 +132,8 @@ public class Authentication {
                         callBacks.onSuccess(response);
                 }else{
                     Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
+                    if (callBacks != null)
+                        callBacks.onError(new Throwable("An error has occured"));
                 }
             }
         });
