@@ -22,8 +22,23 @@ import retrofit2.Response;
 public class Authentication {
 
 
-    public static void register(Context context, String email, String password, String fullName, UserCallBack callBacks){
+    public static void register(Context context, String email, String password, String fullName){
+        registerPost(context, email, password, fullName, new UserCallBack() {
+            @Override
+            public void onSuccess(User value) {
+                System.out.println(value);
+            }
 
+            @Override
+            public void onError(Throwable throwable) {
+
+            }
+        });
+
+
+    }
+
+    private static void registerPost(Context context, String email, String password, String fullName, UserCallBack callBacks){
         Call<User> call = RetrofitClient.getInstance().getMyApi().register(new User(email, password, fullName));
         call.enqueue(new Callback<User>() {
             @Override

@@ -14,17 +14,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Authentication.register(MainActivity.this, "hod@gmail.com", "12345678", "hod gohasi", new UserCallBack(){
-
-            @Override
-            public void onSuccess(User value) {
-                System.out.println(value);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-
-            }
-        });
+//        Authentication.register(MainActivity.this, "hod@gmail.com", "12345678", "hod gohasi", new UserCallBack(){
+//
+//            @Override
+//            public void onSuccess(User value) {
+//                System.out.println(value);
+//            }
+//
+//            @Override
+//            public void onError(Throwable throwable) {
+//
+//            }
+//        });
     }
 }
