@@ -34,7 +34,7 @@ public class Authentication {
 
     public Authentication(){}
 
-    public void register(String email, String password, String fullName,
+    public void register(Context context, String email, String password, String fullName,
                                 @NonNull CallBack callBacks){
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
@@ -56,8 +56,12 @@ public class Authentication {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 System.out.println(response);
-                if (callBacks != null)
-                    callBacks.onSuccess(response);
+                if(response.isSuccessful() && response.body() != null) {
+                    if (callBacks != null)
+                        callBacks.onSuccess(response);
+                }else{
+                    Toast.makeText(context, "Email already exists", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -85,13 +89,18 @@ public class Authentication {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 System.out.println(response);
-                if (callBacks != null)
-                    callBacks.onSuccess(response);
+                if(response.isSuccessful() && response.body() != null){
+                    if (callBacks != null)
+                        callBacks.onSuccess(response);
+                }else{
+                    Toast.makeText(context, "Invalid email or password", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
     }
 
-    public void verifyToken(String accessToken,
+    public void verifyToken(Context context, String accessToken,
                       @NonNull CallBack callBacks){
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
@@ -114,8 +123,12 @@ public class Authentication {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 System.out.println(response);
-                if (callBacks != null)
-                    callBacks.onSuccess(response);
+                if(response.isSuccessful() && response.body() != null) {
+                    if (callBacks != null)
+                        callBacks.onSuccess(response);
+                }else{
+                    Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
