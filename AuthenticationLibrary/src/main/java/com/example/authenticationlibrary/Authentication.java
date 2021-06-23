@@ -31,6 +31,8 @@ public class Authentication {
         this.baseUrl = "http://"+ port +":3005/";
     }
 
+    public Authentication(){}
+
     public void register(String email, String password, String fullName,
                                 @NonNull CallBack callBacks){
         OkHttpClient client = new OkHttpClient().newBuilder()
@@ -81,10 +83,6 @@ public class Authentication {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 System.out.println(response);
-                SharedPreferences pref = context.getSharedPreferences("MyPref", 0);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.remove("access_token");
-                editor.commit();
                 if (callBacks != null)
                     callBacks.onSuccess(response);
             }

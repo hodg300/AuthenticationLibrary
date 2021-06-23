@@ -8,7 +8,6 @@ public class User implements Serializable {
 
     private String email;
     private String fullName;
-    private String accessToken;
 
     public User(String email, String fullName) {
         super();
@@ -35,11 +34,4 @@ public class User implements Serializable {
         this.fullName = fullName;
     }
 
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
 }
