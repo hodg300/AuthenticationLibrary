@@ -142,12 +142,12 @@ public class Authentication {
         editor.commit();
     }
 
-    public boolean checkLoggedIn(Context context){
+    public String checkLoggedIn(Context context){
         SharedPreferences pref = context.getSharedPreferences("MyPref", 0);
         if(pref.contains("access_token")){
-            return true;
+            return pref.getString("access_token", null);
         }
-        return false;
+        return null;
     }
 
 
