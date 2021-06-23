@@ -11,9 +11,8 @@ import retrofit2.http.Query;
 
 public interface Api {
 
-    String BASE_URL = "https://localhost:3005/";
 
-    @Headers("Content-type: application/json")
+
     @POST("users/register")
     Call<User> register(@Body User user);
 

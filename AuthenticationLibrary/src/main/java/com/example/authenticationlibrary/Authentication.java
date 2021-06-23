@@ -8,6 +8,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.authenticationlibrary.model.User;
+import com.example.authenticationlibrary.retrofit.Api;
+import com.example.authenticationlibrary.retrofit.ApiUtils;
 import com.example.authenticationlibrary.retrofit.RetrofitClient;
 import com.example.authenticationlibrary.retrofit.UserCallBack;
 import com.google.gson.Gson;
@@ -22,12 +24,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Authentication {
-
+    public static Api mApi;
 
     public static void register(Context context, String email, String password, String fullName,
                                 @NonNull UserCallBack callBacks){
-        Call<User> call = RetrofitClient.getInstance().getMyApi().register(new User(email, password, fullName));
-        call.enqueue(new Callback<User>() {
+        mApi = ApiUtils.getApi();
+        User user = new User();
+        user.setEmail(email);
+        user.setFullName(fullName);
+        user.setPassword(password);
+
+        mApi.register(user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()) {
@@ -45,7 +52,7 @@ public class Authentication {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                System.out.println("error");
+                System.out.println("error:" + mApi.toString());
                 Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
                 if (callBacks != null)
                     callBacks.onError(t);
@@ -55,41 +62,41 @@ public class Authentication {
     }
 
 
-    private static User parseArray(JSONArray jsonArray) {
-        User user = null;
-        for(int i=0 ; i< jsonArray.length(); i++){
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                user = new User(jsonObject.getString("email"), jsonObject.getString("fullName"));
+//    private static User parseArray(JSONArray jsonArray) {
+//        User user = null;
+//        for(int i=0 ; i< jsonArray.length(); i++){
+//            try {
+//                JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                user = new User(jsonObject.getString("email"), jsonObject.getString("fullName"));
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return user;
+//    }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return user;
-    }
-
-    public static String login(Context context, String email, String password){
-        final String[] accessToken = new String[1];
-        Call<String> call = RetrofitClient.getInstance().getMyApi().jwtLogin(new User(email, password));
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                accessToken[0] = response.body();
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
-            }
-
-        });
-        return accessToken[0];
-    }
+//    public static String login(Context context, String email, String password){
+//        final String[] accessToken = new String[1];
+//        Call<String> call = RetrofitClient.getInstance().getMyApi().jwtLogin(new User(email, password));
+//        call.enqueue(new Callback<String>() {
+//            @Override
+//            public void onResponse(Call<String> call, Response<String> response) {
+//                accessToken[0] = response.body();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<String> call, Throwable t) {
+//                Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
+//            }
+//
+//        });
+//        return accessToken[0];
+//    }
 
     public static boolean verifyToken(Context context, String accessToken){
         final boolean[] isVerified = new boolean[1];
-        Call<Boolean> call = RetrofitClient.getInstance().getMyApi().verifyToken(accessToken);
+        Call<Boolean> call = mApi.verifyToken(accessToken);
         call.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
