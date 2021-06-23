@@ -1,6 +1,10 @@
 package com.example.authenticationlibrary;
 
+import androidx.annotation.NonNull;
+
 import com.example.authenticationlibrary.model.User;
+import com.example.authenticationlibrary.retrofit.ApiUtils;
+import com.example.authenticationlibrary.retrofit.UserCallBack;
 
 import org.junit.Test;
 
@@ -19,7 +23,19 @@ public class ExampleUnitTest {
 
     @Test
     public void register() {
+        System.out.println(ApiUtils.BASE_URL);
+        Authentication.register("hod@gmail.com", "1234567", "hod gohas",
+                new UserCallBack() {
+                    @Override
+                    public void onSuccess(@NonNull User value) {
+                        System.out.println("Done");
+                    }
 
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        System.out.println("Fail");
+                    }
+                });
 //        Authentication.register("hod@gmail.com",
 //                "12345678", "hod gohasi");
         assertEquals(4, 2 + 2);

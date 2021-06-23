@@ -26,24 +26,23 @@ import retrofit2.Response;
 public class Authentication {
     public static Api mApi;
 
-    public static void register(Context context, String email, String password, String fullName,
+    public static void register(String email, String password, String fullName,
                                 @NonNull UserCallBack callBacks){
         mApi = ApiUtils.getApi();
         User user = new User();
         user.setEmail(email);
         user.setFullName(fullName);
         user.setPassword(password);
-
         mApi.register(user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()) {
                     Log.i("TAG", "onResponse: " + response.code());
-                    Toast.makeText(context, "Something wrong: " + response.toString(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "Something wrong: " + response.toString(), Toast.LENGTH_SHORT).show();
                     return;
                 } else {
                     Log.i("TAG", "onResponse: " + response.code());
-                    Toast.makeText(context, "user register", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "user register", Toast.LENGTH_SHORT).show();
                     if (callBacks != null)
                         callBacks.onSuccess(response.body());
 //                    user[0] = response.body();
@@ -53,7 +52,7 @@ public class Authentication {
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 System.out.println("error:" + mApi.toString());
-                Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
                 if (callBacks != null)
                     callBacks.onError(t);
             }
