@@ -4,9 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.example.authenticationlibrary.model.User;
-import com.example.authenticationlibrary.retrofit.UserCallBack;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override

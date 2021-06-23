@@ -1,22 +1,17 @@
 package com.example.authenticationlibrary.model;
 
 
-import com.google.gson.annotations.SerializedName;
-
-
-import com.google.gson.annotations.Expose;
-
 public class User {
 
-    @SerializedName("email")
-    @Expose
+
     private String email;
-    @SerializedName("password")
-    @Expose
-    private String password;
-    @SerializedName("fullName")
-    @Expose
     private String fullName;
+
+    public User(String email, String fullName) {
+        super();
+        this.email = email;
+        this.fullName = fullName;
+    }
 
     public String getEmail() {
         return email;
@@ -26,13 +21,6 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public String getFullName() {
         return fullName;

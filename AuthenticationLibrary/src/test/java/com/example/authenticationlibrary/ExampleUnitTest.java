@@ -1,11 +1,5 @@
 package com.example.authenticationlibrary;
 
-import androidx.annotation.NonNull;
-
-import com.example.authenticationlibrary.model.User;
-import com.example.authenticationlibrary.retrofit.ApiUtils;
-import com.example.authenticationlibrary.retrofit.UserCallBack;
-
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -16,28 +10,57 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
+
     @Test
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
 
-    @Test
-    public void register() {
-        System.out.println(ApiUtils.BASE_URL);
-        Authentication.register("hod@gmail.com", "1234567", "hod gohas",
-                new UserCallBack() {
-                    @Override
-                    public void onSuccess(@NonNull User value) {
-                        System.out.println("Done");
-                    }
+//    @Test
+//    public void register() {
+//        System.out.println(ApiUtils.BASE_URL);
+//        final boolean[] isDone = {false};
+//        Authentication.register("hod@gmail.com", "1234567", "hod gohas",
+//                new UserCallBack() {
+//                    @Override
+//                    public void onSuccess(@NonNull User value) {
+//                        System.out.println("Done");
+//                        isDone[0] = true;
+//                    }
+//
+//                    @Override
+//                    public void onError(@NonNull Throwable throwable) {
+//                        System.out.println("Fail");
+//                        isDone[0] = false;
+//                    }
+//                });
+////        Authentication.register("hod@gmail.com",
+////                "12345678", "hod gohasi");
+//
+//        assertEquals(true, isDone[0]);
+//    }
 
-                    @Override
-                    public void onError(@NonNull Throwable throwable) {
-                        System.out.println("Fail");
-                    }
-                });
-//        Authentication.register("hod@gmail.com",
-//                "12345678", "hod gohasi");
-        assertEquals(4, 2 + 2);
-    }
+//    @Test
+//    public void register() {
+//        System.out.println(ApiUtils.BASE_URL);
+//        final boolean[] isDone = {false};
+//        Authentication.home(
+//                new UserCallBack() {
+//                    @Override
+//                    public void onSuccess(@NonNull String value) {
+//                        System.out.println("Done : " + value);
+//                        isDone[0] = true;
+//                    }
+//
+//                    @Override
+//                    public void onError(@NonNull Throwable throwable) {
+//                        System.out.println("Fail");
+//                        isDone[0] = false;
+//                    }
+//                });
+////        Authentication.register("hod@gmail.com",
+////                "12345678", "hod gohasi");
+//
+////        assertEquals(true, isDone[0]);
+//    }
 }
