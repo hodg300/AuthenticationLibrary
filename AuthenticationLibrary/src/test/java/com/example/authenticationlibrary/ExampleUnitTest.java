@@ -1,5 +1,7 @@
 package com.example.authenticationlibrary;
 
+import com.example.authenticationlibrary.model.User;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -12,6 +14,14 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
+        assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void register() {
+
+//        Authentication.register("hod@gmail.com",
+//                "12345678", "hod gohasi");
         assertEquals(4, 2 + 2);
     }
 }

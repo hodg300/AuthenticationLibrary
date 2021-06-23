@@ -2,10 +2,12 @@ package com.example.authenticationlibrary.retrofit;
 
 
 
+import androidx.annotation.NonNull;
+
 import com.example.authenticationlibrary.model.User;
 
 public interface UserCallBack {
-    void onSuccess(User value);
+    void onSuccess(@NonNull User value);
 
-    void onError(Throwable throwable);
+    void onError(@NonNull Throwable throwable);
 }

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.example.authenticationlibrary.model.User;
 import com.example.authenticationlibrary.retrofit.RetrofitClient;
 import com.example.authenticationlibrary.retrofit.UserCallBack;
@@ -22,23 +24,8 @@ import retrofit2.Response;
 public class Authentication {
 
 
-    public static void register(Context context, String email, String password, String fullName){
-        registerPost(context, email, password, fullName, new UserCallBack() {
-            @Override
-            public void onSuccess(User value) {
-                System.out.println(value);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-
-            }
-        });
-
-
-    }
-
-    private static void registerPost(Context context, String email, String password, String fullName, UserCallBack callBacks){
+    public static void register(Context context, String email, String password, String fullName,
+                                @NonNull UserCallBack callBacks){
         Call<User> call = RetrofitClient.getInstance().getMyApi().register(new User(email, password, fullName));
         call.enqueue(new Callback<User>() {
             @Override
@@ -58,6 +45,7 @@ public class Authentication {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+                System.out.println("error");
                 Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
                 if (callBacks != null)
                     callBacks.onError(t);
@@ -65,6 +53,7 @@ public class Authentication {
 
         });
     }
+
 
     private static User parseArray(JSONArray jsonArray) {
         User user = null;
