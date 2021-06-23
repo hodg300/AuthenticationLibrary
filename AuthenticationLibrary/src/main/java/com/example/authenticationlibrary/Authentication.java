@@ -4,6 +4,7 @@ package com.example.authenticationlibrary;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -38,7 +39,7 @@ public class Authentication {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create("{\n    \"email\": \"" + email + "\",\n    \"password\": \""+ password+"\",\n    \"fullName\": \""+ fullName +"\"\n}", mediaType);
+        RequestBody body = RequestBody.create("{\n    \"email\": \"" + email + "\",\n    \"password\": \""+ password+"\",\n    \"fullName\": \""+ fullName +"\"\n   }", mediaType);
         Request request = new Request.Builder()
                 .url(this.baseUrl + "users/register")
                 .method("POST", body)
@@ -66,7 +67,7 @@ public class Authentication {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create("{\n    \"email\": \"" + email + "\",\n    \"password\": \""+ password+"\",\n    }", mediaType);
+        RequestBody body = RequestBody.create("{\n    \"email\": \"" + email + "\",\n    \"password\": \"" + password + "\"\n    }", mediaType);
         Request request = new Request.Builder()
                 .url(this.baseUrl + "users/jwt-login")
                 .method("POST", body)
@@ -76,6 +77,7 @@ public class Authentication {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 System.out.println(e);
+                Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
                 if (callBacks != null)
                     callBacks.onError(e);
             }
