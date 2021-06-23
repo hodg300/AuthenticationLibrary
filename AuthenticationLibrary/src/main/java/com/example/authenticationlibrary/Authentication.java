@@ -106,10 +106,10 @@ public class Authentication {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create("{}", mediaType);
+//        RequestBody body = RequestBody.create("{}", mediaType);
         Request request = new Request.Builder()
                 .url(this.baseUrl + "users/verify-token")
-                .method("GET", body)
+                .method("GET", null)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Access-Token", accessToken)
                 .build();
