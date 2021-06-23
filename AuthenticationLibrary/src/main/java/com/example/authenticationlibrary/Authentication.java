@@ -23,7 +23,7 @@ public class Authentication {
     private String port;
     private String baseUrl;
 
-    void Authentication(String port){
+    public Authentication(String port){
         this.port = port;
         this.baseUrl = "http://"+ port +":3005/";
     }
