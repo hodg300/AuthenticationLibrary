@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.example.authenticationlibrary.model.User;
 import com.example.authenticationlibrary.retrofit.RetrofitClient;
+import com.example.authenticationlibrary.retrofit.UserCallBack;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 
@@ -21,8 +22,7 @@ import retrofit2.Response;
 public class Authentication {
 
 
-    public static User register(Context context, String email, String password, String fullName){
-        final User[] user = new User[1];
+    public static void register(Context context, String email, String password, String fullName, UserCallBack callBacks){
 
         Call<User> call = RetrofitClient.getInstance().getMyApi().register(new User(email, password, fullName));
         call.enqueue(new Callback<User>() {
@@ -35,18 +35,20 @@ public class Authentication {
                 } else {
                     Log.i("TAG", "onResponse: " + response.code());
                     Toast.makeText(context, "user register", Toast.LENGTH_SHORT).show();
-                    user[0] = response.body();
+                    if (callBacks != null)
+                        callBacks.onSuccess(response.body());
+//                    user[0] = response.body();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(context, "An error has occured", Toast.LENGTH_LONG).show();
-                return;
+                if (callBacks != null)
+                    callBacks.onError(t);
             }
 
         });
-        return user[0];
     }
 
     private static User parseArray(JSONArray jsonArray) {
