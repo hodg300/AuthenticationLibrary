@@ -1,9 +1,10 @@
 package com.example.authenticationlibrary;
 
-
-
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -33,7 +34,7 @@ public class Authentication {
 
     public Authentication(){}
 
-    public void register(String email, String password, String fullName,
+    public void register(Context context, String email, String password, String fullName,
                                 @NonNull CallBack callBacks){
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
@@ -48,6 +49,7 @@ public class Authentication {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 System.out.println(e);
+                showToast(context, "An error has occured");
                 if (callBacks != null)
                     callBacks.onError(e);
             }
@@ -59,6 +61,7 @@ public class Authentication {
                     if (callBacks != null)
                         callBacks.onSuccess(response);
                 }else{
+                    showToast(context, "Email already exists");
                     if (callBacks != null)
                         callBacks.onError(new Throwable("Email already exists"));
                 }
@@ -66,7 +69,7 @@ public class Authentication {
         });
     }
 
-    public void login(String email, String password,
+    public void login(Context context, String email, String password,
                          @NonNull CallBack callBacks){
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
@@ -81,6 +84,7 @@ public class Authentication {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 System.out.println(e);
+                showToast(context, "An error has occured");
                 if (callBacks != null)
                     callBacks.onError(e);
             }
@@ -92,6 +96,7 @@ public class Authentication {
                     if (callBacks != null)
                         callBacks.onSuccess(response);
                 }else{
+                    showToast(context, "Invalid email or password");
                     if (callBacks != null)
                         callBacks.onError(new Throwable("Invalid email or password"));
                 }
@@ -100,12 +105,10 @@ public class Authentication {
         });
     }
 
-    public void verifyToken(String accessToken,
+    public void verifyToken(Context context, String accessToken,
                       @NonNull CallBack callBacks){
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
-        MediaType mediaType = MediaType.parse("application/json");
-//        RequestBody body = RequestBody.create("{}", mediaType);
         Request request = new Request.Builder()
                 .url(this.baseUrl + "users/verify-token")
                 .method("GET", null)
@@ -116,6 +119,7 @@ public class Authentication {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 System.out.println(e);
+                showToast(context, "An error has occured");
                 if (callBacks != null)
                     callBacks.onError(e);
             }
@@ -139,6 +143,8 @@ public class Authentication {
         SharedPreferences.Editor editor = pref.edit();
         editor.remove("access_token");
         editor.commit();
+        showToast(context, "Sign out");
+
     }
 
     public String checkLoggedIn(Context context){
@@ -147,6 +153,16 @@ public class Authentication {
             return pref.getString("access_token", null);
         }
         return null;
+    }
+
+    private void showToast(Context context, String message){
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context,
+                        message, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
