@@ -4,7 +4,6 @@ package com.example.authenticationlibrary;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -24,12 +23,12 @@ import okhttp3.Response;
 
 public class Authentication {
 
-    private String port;
+    private String ip;
     private String baseUrl;
 
-    public Authentication(String port){
-        this.port = port;
-        this.baseUrl = "http://"+ port +":3005/";
+    public Authentication(String ip){
+        this.ip = ip;
+        this.baseUrl = "http://"+ ip +":3005/";
     }
 
     public Authentication(){}
